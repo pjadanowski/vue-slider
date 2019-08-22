@@ -1,17 +1,27 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+<!--    <img alt="Vue logo" src="./assets/logo.png">-->
+    <Gallery :images="images"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Gallery from './components/Gallery.vue'
 
 export default {
   name: 'app',
+  data() {
+    return {
+      images: [
+              'https://picsum.photos/400',
+              'https://picsum.photos/id/1000/400',
+              'https://picsum.photos/id/1001/400',
+              'https://picsum.photos/id/1002/400',
+      ]
+    }
+  },
   components: {
-    HelloWorld
+    Gallery
   }
 }
 </script>
