@@ -1,11 +1,9 @@
 <template>
     <div class="d-flex justify-content-center w-100">
-        <h4>Sliders</h4>
-
         <div class="sliders-wrap">
 
             <div class="sliders">
-                <single-slide v-for="(img, index) in slides" :key="index" :image="img" />
+                <single-slide v-for="(img, index) in slides" :key="index" :image="img" @openLightbox="openLightboxParent"/>
             </div>
             <div class="arrows d-flex justify-content-between align-items-center">
                 <div class="left">
@@ -13,13 +11,23 @@
                 </div>
 
                 <div class="bulets d-flex">
-                    <div class="bulet border-ccc mx-1" :class="{'white': index === currentSlide}" v-for="(img, index) in images" :key="index">
-                        
-                    </div>
+                    <div class="bulet border-ccc mx-1" :class="{'white': index === currentSlide}" 
+                         v-for="(img, index) in images" :key="index"
+                         @click.prevent="setCurrentSlide(index)"
+                    ></div>
                 </div>
                 <div class="right">
                     <button class="btn btn-default" @click.prevent="setCurrentSlide(currentSlide + 1)"> ❯ </button>
                 </div>
+            </div>
+        </div>
+
+
+        <!-- The Modal/Lightbox -->
+        <div id="myModal" class="modal" v-if="lightbox" :class="{ 'd-block' : lightbox }" @keyup.esc="closeLightbox">
+            <span class="close cursor" @click.prevent="closeLightbox">&times;</span>
+            <div class="modal-content">
+                <single-slide v-for="(img, index) in slides" :key="index" :image="img" @openLightbox="openLightboxParent"/>
             </div>
         </div>
     </div>
@@ -36,7 +44,8 @@
         data() {
             return {
                 currentSlide: 0,
-                slides: this.images
+                slides: this.images,
+                lightbox: false
             }
         },
         props: {
@@ -64,10 +73,30 @@
             },
             setCurrentSlide(numb) {
                 this.currentSlide = numb;
+            },
+            openLightboxParent() {
+                console.log("modal parent");
+                this.lightbox = true;
+                
+            },
+            closeLightbox() {
+                console.log("closing");
+                this.lightbox = false;
+            },
+            listenForEsc() {
+                let that = this;
+
+                document.addEventListener('keyup', function (evt) {
+                    if (evt.keyCode === 27) {
+                        that.closeLightbox();
+                    }
+                });
             }
         },
         mounted() {
-            this.showSlideWithIndex(this.currentSlide)
+            this.showSlideWithIndex(this.currentSlide);
+
+            this.listenForEsc()
         },
         watch: {
             currentSlide(value) {
@@ -95,9 +124,15 @@
         /* position: absolute; */
         /* top:50%; */
         z-index: 99999999999999999;
+        background: #f0f0f0;
     }
     .arrows button {
         font-size: 3rem;
+    }
+    .arrows button:focus,
+    .arrows button:active {
+        outline: 0;
+        box-shadow: none;
     }
 
     .bulet {
@@ -106,7 +141,9 @@
         border-radius: 50%;
         padding: 0;
         background-color: transparent;
+        cursor: pointer;
     }
+    
     .bulet.white{
         background: #FFF !important;
     }
@@ -114,4 +151,7 @@
         border: 1px solid #ccc!important;
     }
 
+    .d-block {
+        display: block !important;
+    }
 </style>
