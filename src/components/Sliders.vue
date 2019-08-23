@@ -1,24 +1,33 @@
 <template>
     <div class="d-flex justify-content-center w-100">
         <h4>Sliders</h4>
-        <div class="sliders">
-            <single-slide v-for="(img, index) in slides" :key="index" :image="img" />
-        </div>
-        <div class="arrows justify-content-between">
-            <div class="left">
-                <button class="btn btn-default" @click.prevent="setCurrentSlide(currentSlide - 1)"> < </button>
-            </div>
-            <div class="right">
-                <button class="btn btn-default" @click.prevent="setCurrentSlide(currentSlide + 1)"> > </button>
-            </div>
 
+        <div class="sliders-wrap">
+
+            <div class="sliders">
+                <single-slide v-for="(img, index) in slides" :key="index" :image="img" />
+            </div>
+            <div class="arrows d-flex justify-content-between align-items-center">
+                <div class="left">
+                    <button class="btn btn-default" @click.prevent="setCurrentSlide(currentSlide - 1)"> ❮ </button>
+                </div>
+
+                <div class="bulets d-flex">
+                    <div class="bulet border-ccc mx-1" :class="{'white': index === currentSlide}" v-for="(img, index) in images" :key="index">
+                        
+                    </div>
+                </div>
+                <div class="right">
+                    <button class="btn btn-default" @click.prevent="setCurrentSlide(currentSlide + 1)"> ❯ </button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import SingleSlide from "./SingleSlide";
-import { setInterval } from 'timers';
+    
     export default {
         name: "Sliders",
         components: {
@@ -83,11 +92,26 @@ import { setInterval } from 'timers';
 
     .arrows {
         display: flex;
-        position: absolute;
-        top:50%;
+        /* position: absolute; */
+        /* top:50%; */
         z-index: 99999999999999999;
     }
     .arrows button {
         font-size: 3rem;
     }
+
+    .bulet {
+        height: 13px;
+        width: 13px;
+        border-radius: 50%;
+        padding: 0;
+        background-color: transparent;
+    }
+    .bulet.white{
+        background: #FFF !important;
+    }
+    .border-ccc {
+        border: 1px solid #ccc!important;
+    }
+
 </style>
