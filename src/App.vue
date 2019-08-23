@@ -13,10 +13,10 @@ export default {
   data() {
     return {
       images: [
-              'https://picsum.photos/400',
-              'https://picsum.photos/id/1000/400',
-              'https://picsum.photos/id/1001/400',
-              'https://picsum.photos/id/1002/400',
+              'https://picsum.photos/600',
+              'https://picsum.photos/id/1000/600',
+              'https://picsum.photos/id/1001/600',
+              'https://picsum.photos/id/1002/600',
       ],
       currentSlide: 0,
       timer: null

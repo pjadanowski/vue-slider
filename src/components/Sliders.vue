@@ -27,7 +27,12 @@
         <div id="myModal" class="modal" v-if="lightbox" :class="{ 'd-block' : lightbox }" @keyup.esc="closeLightbox">
             <span class="close cursor" @click.prevent="closeLightbox">&times;</span>
             <div class="modal-content">
-                <single-slide v-for="(img, index) in slides" :key="index" :image="img" @openLightbox="openLightboxParent"/>
+                <single-slide-modal v-for="(img, index) in slides" :key="index" :image="img" @openLightbox="openLightboxParent"/>
+            </div>
+
+            <div class="modal-control position-absolute">
+                <div class="left"> <button class="btn btn-default" @click.prevent="setCurrentSlide(currentSlide - 1)">❮</button> </div>
+                <div class="right">  <button class="btn btn-default" @click.prevent="setCurrentSlide(currentSlide + 1)">❯</button> </div>
             </div>
         </div>
     </div>
@@ -35,11 +40,12 @@
 
 <script>
     import SingleSlide from "./SingleSlide";
+    import SingleSlideModal from "./SingleSlideModal";
     
     export default {
         name: "Sliders",
         components: {
-          SingleSlide
+          SingleSlide, SingleSlideModal
         },
         data() {
             return {
@@ -86,8 +92,8 @@
             listenForEsc() {
                 let that = this;
 
-                document.addEventListener('keyup', function (evt) {
-                    if (evt.keyCode === 27) {
+                document.addEventListener('keydown', function (evt) {
+                    if (evt.key === 'Escape' && that.lightbox) {
                         that.closeLightbox();
                     }
                 });
@@ -153,5 +159,83 @@
 
     .d-block {
         display: block !important;
+    }
+
+
+
+
+
+
+
+
+
+
+    /* The Modal (background) */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, .8);
+    }
+
+    /* Modal Content */
+    .modal-content {
+        position: relative;
+        background: none;
+        margin: auto;
+        padding: 0;
+        width: 90%;
+        max-width: 1200px;
+        height: auto;
+        max-height: 90%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: white;
+        position: absolute;
+        top: 10px;
+        right: 25px;
+        font-size: 35px;
+        font-weight: bold;
+        z-index: 100;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #999;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-control {
+        color: #FFF !important;
+        left: 0;
+        top: calc(50% - 1.5rem);
+        display: inline-flex;
+        justify-content: space-between;
+        width: 100vw;
+        padding: 0 10px;
+        z-index: 99999999999999999999999999999;
+    }
+    .modal-control button {
+        color: #FFF !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 3rem;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        width: 4.5rem !important;
+        height: 4.5rem !important;
+    }
+
+    .modal-control .right {
+        right: 0 !important;
     }
 </style>
