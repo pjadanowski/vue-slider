@@ -1,6 +1,10 @@
 <template>
-    <div class="slide-img" :style="backgroundImage">
-        <h1>asdasd</h1>
+    <!-- <div class="slide-img" :style="backgroundImage"> -->
+        <!-- <h1>asdasd</h1> -->
+    <!-- </div> -->
+
+    <div class="slide-img">
+        <img :src="image" alt="" class="img-fluid">
     </div>
 </template>
 
