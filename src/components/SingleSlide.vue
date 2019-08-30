@@ -1,7 +1,7 @@
 <template>
-    <div class="slide-img animate-left">
-        <img :src="image" alt="" @click.prevent="openLightbox" class="img-fluid">
-    </div>
+    <!-- <div class="slide-img"> -->
+        <img :src="image" alt="" @click.prevent="openLightbox" class="img-fluid" />
+    <!-- </div> -->
 </template>
 
 <script>
@@ -26,24 +26,17 @@
     }
 </script>
 
-<style >
+<style scoped>
+
     .slide-img {
         position: relative;
-        display: block;
+        max-height: inherit;
+        max-width: inherit;
+    }
+
+    img {
         max-height: 100%;
         max-width: 100%;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
     }
-
-    .slide-img:hover {
-        cursor: pointer;
-    }
-
-
-    .animate-left{position:relative;animation:animateleft 0.4s}@keyframes animateleft{from{left:-300px;opacity:0} to{left:0;opacity:1}}
-
-
 
 </style>

@@ -3,7 +3,8 @@
         <div class="sliders-wrap">
 
             <div class="sliders">
-                <single-slide v-for="(img, index) in slides" :key="index" :image="img" @openLightbox="openLightboxParent"/>
+                <single-slide v-for="(img, index) in slides" :key="index" :image="img"
+                    @openLightbox="openLightboxParent" />
             </div>
             <div class="arrows d-flex justify-content-between align-items-center">
                 <div class="left">
@@ -11,10 +12,8 @@
                 </div>
 
                 <div class="bulets d-flex">
-                    <div class="bulet border-ccc mx-1" :class="{'white': index === currentSlide}" 
-                         v-for="(img, index) in images" :key="index"
-                         @click.prevent="setCurrentSlide(index)"
-                    ></div>
+                    <div class="bulet border-ccc mx-1" :class="{'white': index === currentSlide}"
+                        v-for="(img, index) in images" :key="index" @click.prevent="setCurrentSlide(index)"></div>
                 </div>
                 <div class="right">
                     <button class="btn btn-default" @click.prevent="setCurrentSlide(currentSlide + 1)"> ❯ </button>
@@ -24,15 +23,30 @@
 
 
         <!-- The Modal/Lightbox -->
-        <div id="myModal" class="modal" v-if="lightbox" :class="{ 'd-block' : lightbox }" @keyup.esc="closeLightbox">
-            <span class="close cursor" @click.prevent="closeLightbox">&times;</span>
-            <div class="modal-content">
-                <single-slide-modal v-for="(img, index) in slides" :key="index" :image="img" @openLightbox="openLightboxParent"/>
-            </div>
+        <div class="modal-wrapper" v-if="lightbox" :class="{ 'd-block' : lightbox }">
+            <div class="modal-container">
 
-            <div class="modal-control position-absolute">
-                <div class="left"> <button class="btn btn-default" @click.prevent="setCurrentSlide(currentSlide - 1)">❮</button> </div>
-                <div class="right">  <button class="btn btn-default" @click.prevent="setCurrentSlide(currentSlide + 1)">❯</button> </div>
+                <div class="modal-header">
+                    <div class="btn-wrapper">
+                        <button @click.prevent="closeLightbox"> &times; </button>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="img-wrapper">
+                        <single-slide-modal v-for="(img, index) in slides" :key="index" :image="img"
+                            @openLightbox="openLightboxParent" />
+                    </div>
+                </div>
+
+                <div class="modal-control position-absolute">
+                    <div class="left"> <button class="btn btn-default"
+                            @click.prevent="setCurrentSlide(currentSlide - 1)">❮</button> </div>
+                    <div class="right"> <button class="btn btn-default"
+                            @click.prevent="setCurrentSlide(currentSlide + 1)">❯</button> </div>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -41,11 +55,12 @@
 <script>
     import SingleSlide from "./SingleSlide";
     import SingleSlideModal from "./SingleSlideModal";
-    
+
     export default {
         name: "Sliders",
         components: {
-          SingleSlide, SingleSlideModal
+            SingleSlide,
+            SingleSlideModal
         },
         data() {
             return {
@@ -61,19 +76,23 @@
         },
         methods: {
             showSlideWithIndex(index) {
-                if (index > this.images.length) { index = 0; }
-                if (index < 0) { index = this.images.length - 1 ; }
+                if (index > this.images.length) {
+                    index = 0;
+                }
+                if (index < 0) {
+                    index = this.images.length - 1;
+                }
 
-                this.images.forEach( (img, ind ) => {
+                this.images.forEach((img, ind) => {
                     if (index === ind) {
-                        this.slides = [img]; 
+                        this.slides = [img];
                     }
                 })
             },
             showSlide() {
-                this.images.forEach( (img, ind ) => {
+                this.images.forEach((img, ind) => {
                     if (this.currentSlide === ind) {
-                        this.slides = [img]; 
+                        this.slides = [img];
                     }
                 })
             },
@@ -83,7 +102,7 @@
             openLightboxParent() {
                 console.log("modal parent");
                 this.lightbox = true;
-                
+
             },
             closeLightbox() {
                 console.log("closing");
@@ -97,17 +116,32 @@
                         that.closeLightbox();
                     }
                 });
+            },
+            listenKeyArrows() {
+                let that = this;
+
+                document.addEventListener('keydown', function (evt) {
+                    console.log(evt.key);
+                    
+                    if (evt.key === 'ArrowLeft') { that.setCurrentSlide(that.currentSlide - 1); }
+                    if (evt.key === 'ArrowRight') { that.setCurrentSlide(that.currentSlide + 1); }
+                });
             }
         },
         mounted() {
             this.showSlideWithIndex(this.currentSlide);
 
             this.listenForEsc()
+            this.listenKeyArrows()
         },
         watch: {
             currentSlide(value) {
-                if (this.currentSlide > this.images.length - 1) { this.currentSlide = 0; }
-                if (this.currentSlide < 0) { this.currentSlide = this.images.length - 1 ; }
+                if (this.currentSlide > this.images.length - 1) {
+                    this.currentSlide = 0;
+                }
+                if (this.currentSlide < 0) {
+                    this.currentSlide = this.images.length - 1;
+                }
 
                 this.showSlideWithIndex(this.currentSlide)
             }
@@ -132,9 +166,11 @@
         z-index: 99999999999999999;
         background: #f0f0f0;
     }
+
     .arrows button {
         font-size: 3rem;
     }
+
     .arrows button:focus,
     .arrows button:active {
         outline: 0;
@@ -149,12 +185,13 @@
         background-color: transparent;
         cursor: pointer;
     }
-    
-    .bulet.white{
+
+    .bulet.white {
         background: #FFF !important;
     }
+
     .border-ccc {
-        border: 1px solid #ccc!important;
+        border: 1px solid #ccc !important;
     }
 
     .d-block {
@@ -164,54 +201,78 @@
 
 
 
-
-
-
-
-
-
-    /* The Modal (background) */
-    .modal {
+    .modal-wrapper {
         display: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1043;
         position: fixed;
-        z-index: 1;
-        padding-top: 100px;
+        outline: none !important;
+        background: rgba(0, 0, 0, .85);
+    }
+
+
+    .modal-container {
+        text-align: center;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        box-sizing: border-box;
+    }
+
+    .modal-header {
+        position: fixed;
         left: 0;
         top: 0;
         width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, .8);
+        height: 40px;
+        display: flex;
+        justify-content: flex-end;
     }
 
-    /* Modal Content */
-    .modal-content {
-        position: relative;
-        background: none;
-        margin: auto;
+    .btn-wrapper {
+        display: flex;
+        align-items: center;
+        margin: 0;
         padding: 0;
-        width: 90%;
-        max-width: 1200px;
-        height: auto;
-        max-height: 90%;
     }
 
-    /* The Close Button */
-    .close {
-        color: white;
-        position: absolute;
-        top: 10px;
-        right: 25px;
-        font-size: 35px;
-        font-weight: bold;
-        z-index: 100;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: #999;
-        text-decoration: none;
+    .btn-wrapper button {
+        background: none;
+        outline: none !important;
+        border: none !important;
+        color: #FFF;
+        font-size: 2rem;
         cursor: pointer;
+    }
+
+
+    .modal-body {
+        max-height: 100%;
+        max-width: 1200px;
+        width: 90%;
+        height: auto;
+        /* border: 1px solid #FFF; */
+        margin: 0 auto;
+        padding-top: 40px;
+    }
+
+    .img-wrapper img {
+        position: fixed;
+        /* background-color: white; */
+        margin: 0;
+        padding: 0;
+        max-height: 90%;
+        max-width: 90%;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0px 0px 12px rgba(0, 0, 0, .8);
     }
 
     .modal-control {
@@ -222,8 +283,9 @@
         justify-content: space-between;
         width: 100vw;
         padding: 0 10px;
-        z-index: 99999999999999999999999999999;
+        z-index: 999999999;
     }
+
     .modal-control button {
         color: #FFF !important;
         margin: 0 !important;

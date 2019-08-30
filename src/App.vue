@@ -14,9 +14,9 @@ export default {
     return {
       images: [
               'https://picsum.photos/600',
-              'https://picsum.photos/id/1000/600',
-              'https://picsum.photos/id/1001/600',
-              'https://picsum.photos/id/1002/600',
+              'https://picsum.photos/2600/600',
+              'https://picsum.photos/300/2600',
+              'https://picsum.photos/1002/600',
       ],
       currentSlide: 0,
       timer: null
